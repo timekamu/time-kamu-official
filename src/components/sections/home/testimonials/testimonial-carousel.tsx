@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
@@ -10,8 +11,11 @@ interface TestimonialCarouselProps {
   users: UserData[];
 }
 
-export const TestimonialCarousel = ({ users }: TestimonialCarouselProps) => {
+export const TestimonialCarousel = ({
+  users,
+}: TestimonialCarouselProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
+
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
     align: "center",
@@ -23,12 +27,16 @@ export const TestimonialCarousel = ({ users }: TestimonialCarouselProps) => {
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
+
     setActiveIndex(emblaApi.selectedScrollSnap());
   }, [emblaApi]);
 
+  // Sync Active Slide
   useEffect(() => {
     if (!emblaApi) return;
-    const rafId = requestAnimationFrame(() => onSelect());
+
+    const rafId = requestAnimationFrame(onSelect);
+
     emblaApi.on("select", onSelect);
     emblaApi.on("reInit", onSelect);
 
@@ -39,36 +47,48 @@ export const TestimonialCarousel = ({ users }: TestimonialCarouselProps) => {
     };
   }, [emblaApi, onSelect]);
 
-  // Auto-scroll effect
+  // Automatic Carousel Scroll
   useEffect(() => {
-    if (!emblaApi) return;
+    if (!emblaApi || users.length <= 1) return;
 
-    const autoScroll = setInterval(() => {
+    const autoScroll = window.setInterval(() => {
       emblaApi.scrollNext();
     }, 5000);
 
     return () => {
-      clearInterval(autoScroll);
+      window.clearInterval(autoScroll);
     };
-  }, [emblaApi]);
+  }, [emblaApi, users.length]);
 
+  // Avatar Click Navigation
   const scrollTo = useCallback(
     (index: number) => {
       if (!emblaApi) return;
+
       emblaApi.scrollTo(index);
     },
-    [emblaApi],
+    [emblaApi]
   );
+
+  // Empty State
+  if (!users || users.length === 0) {
+    return null;
+  }
 
   return (
     <div className="mx-auto w-full space-y-4 sm:space-y-6 md:space-y-8">
+      {/* Avatar Navigation */}
       <AvatarCarousel
         users={users}
         activeIndex={activeIndex}
         onAvatarClick={scrollTo}
       />
 
-      <div className="embla overflow-hidden px-4 sm:px-0" ref={emblaRef}>
+      {/* Testimonial Carousel */}
+      <div
+        className="embla overflow-hidden px-4 sm:px-0"
+        ref={emblaRef}
+      >
         <div className="embla__container flex cursor-grab active:cursor-grabbing touch-pan-y select-none">
           {users.map((user, index) => (
             <MessageCard
