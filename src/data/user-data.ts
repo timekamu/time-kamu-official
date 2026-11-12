@@ -1,3 +1,4 @@
+
 export interface UserData {
   id: string;
   name: string;
@@ -7,46 +8,45 @@ export interface UserData {
   vimeoId?: string;
 }
 
-// Example testimonial data — replace with your own clients, photos, and Vimeo IDs.
 export const userData: UserData[] = [
   {
-    id: "jane-doe",
-    name: "Jane Doe",
+    id: "video-editing",
+    name: "Video Editing",
     avatar: "/testimonials/placeholder-1.png",
-    message: "Professional, patient, and easy to communicate with. Delivered exactly what was needed — smooth, stress-free, and genuinely pleasant to work with.",
-    role: "Film Director",
-    vimeoId: "000000000"
+    message:
+      "Transforming raw footage into engaging visual stories with cinematic cuts, smooth transitions, creative effects and professional finishing.",
+    role: "TIME KAMU • Creative Service",
   },
   {
-    id: "john-smith",
-    name: "John Smith",
+    id: "2d-animation",
+    name: "2D Animation",
     avatar: "/testimonials/placeholder-2.png",
-    message: "Understood our vision clearly and created a visually stunning result with smooth transitions. Professional communication and precise revisions.",
-    role: "Filmmaker",
-    vimeoId: "000000000"
+    message:
+      "Bringing ideas to life through expressive 2D animation, character movement, storytelling and imaginative visual sequences.",
+    role: "TIME KAMU • Creative Service",
   },
   {
-    id: "alex-taylor",
-    name: "Alex Taylor",
+    id: "graphic-design",
+    name: "Graphic Design",
     avatar: "/testimonials/placeholder-3.png",
-    message: "Consistently reliable and focused throughout. Delivered high-quality work on time with smooth revisions — made the process efficient and stress-free.",
-    role: "Co-founder, Example Studio",
-    vimeoId: "000000000"
+    message:
+      "Creating eye-catching graphics, thumbnails, social media designs and visual identities that make every idea stand out.",
+    role: "TIME KAMU • Creative Service",
   },
   {
-    id: "sam-lee",
-    name: "Sam Lee",
+    id: "motion-design",
+    name: "Motion Design",
     avatar: "/testimonials/placeholder-4.png",
-    message: "Exceeded expectations on our project. Added personality without losing our unique style, hit every timeline milestone, and required minimal hand-holding.",
-    role: "Design Studio Owner",
-    vimeoId: "000000000"
+    message:
+      "Combining typography, movement, visual effects and creative transitions to produce dynamic motion graphics.",
+    role: "TIME KAMU • Creative Service",
   },
   {
-    id: "morgan-riley",
-    name: "Morgan Riley",
+    id: "creative-storytelling",
+    name: "Creative Storytelling",
     avatar: "/testimonials/placeholder-5.png",
-    message: "Absolutely incredible edit! The energy, transitions, and motion effects were on point. Super professional work from start to finish.",
-    role: "Content Creator",
-    vimeoId: "000000000"
-  }
+    message:
+      "Every frame has a purpose. Turning imagination into meaningful visual experiences through creativity and attention to detail.",
+    role: "TIME KAMU • Creative Vision",
+  },
 ];
