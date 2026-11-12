@@ -1,13 +1,20 @@
+
 "use client";
 
 import React, { useEffect, useRef } from "react";
 import Cal, { getCalApi } from "@calcom/embed-react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useInView,
+} from "framer-motion";
 import PhraseAnimation from "@/components/common/phrase-reveal";
 
 const CalBooking = () => {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
+
   const headerInView = useInView(headerRef, {
     once: true,
     margin: "0px 0px -80px 0px",
@@ -23,10 +30,26 @@ const CalBooking = () => {
   const yCalendar = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
   useEffect(() => {
-    (async function () {
-      const cal = await getCalApi({ namespace: "30min" });
-      cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
+    let active = true;
+
+    (async () => {
+      try {
+        const cal = await getCalApi({ namespace: "30min" });
+
+        if (!active) return;
+
+        cal("ui", {
+          hideEventTypeDetails: false,
+          layout: "month_view",
+        });
+      } catch (error) {
+        console.error("Cal.com initialization failed:", error);
+      }
     })();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   return (
@@ -43,27 +66,38 @@ const CalBooking = () => {
         <motion.div
           initial={{ opacity: 0, y: 14, filter: "blur(6px)" }}
           animate={
-            headerInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}
+            headerInView
+              ? { opacity: 1, y: 0, filter: "blur(0px)" }
+              : {}
           }
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          transition={{
+            duration: 0.7,
+            ease: [0.16, 1, 0.3, 1],
+          }}
           className="mx-auto mb-4 w-fit rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-xs font-medium text-primary uppercase tracking-widest"
         >
-          Book time
+          LET'S CONNECT
         </motion.div>
 
         {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 32, filter: "blur(10px)" }}
           animate={
-            headerInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}
+            headerInView
+              ? { opacity: 1, y: 0, filter: "blur(0px)" }
+              : {}
           }
-          transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          transition={{
+            duration: 0.9,
+            delay: 0.1,
+            ease: [0.16, 1, 0.3, 1],
+          }}
         >
           <h3 className="text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
-            <PhraseAnimation phrase="Let's  Make  Something " />
+            <PhraseAnimation phrase="Let's Create " />
             <span className="block bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
               <PhraseAnimation
-                phrase="Awesome  Together"
+                phrase="Something Awesome"
                 className="text-primary"
               />
             </span>
@@ -74,55 +108,61 @@ const CalBooking = () => {
         <motion.div
           initial={{ scaleX: 0 }}
           animate={headerInView ? { scaleX: 1 } : {}}
-          transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          transition={{
+            duration: 1,
+            delay: 0.3,
+            ease: [0.16, 1, 0.3, 1],
+          }}
           style={{ originX: 0 }}
           className="mx-auto mt-6 h-px max-w-xs bg-linear-to-r from-primary/60 via-primary/20 to-transparent"
         />
 
+        {/* Description */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={headerInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
+          transition={{
+            duration: 0.7,
+            delay: 0.38,
+            ease: [0.16, 1, 0.3, 1],
+          }}
           className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl"
         >
-          Schedule a 30-minute call to discuss your project and process.
+          Book a creative discussion with TIME KAMU. Let's talk about video
+          editing, 2D animation, graphic design and your next big idea.
         </motion.div>
       </div>
 
-      {/* 2. Responsive Container: Flex Column on Mobile, Block on Desktop */}
+      {/* 2. Responsive Container */}
       <div className="relative flex flex-col items-center lg:block max-w-7xl mx-auto">
-        {/* --- LAYER 1: The Image --- */}
+        {/* LAYER 1: The Image */}
         <motion.div
           style={{ y: yImage }}
           className="relative z-0 w-full max-w-[400px] lg:max-w-none lg:mx-auto"
         >
           <img
-            src={"/ichigo2.png"}
-            alt="Profile photo"
+            src="/ichigo2.png"
+            alt="TIME KAMU creative profile"
             className="block mx-auto object-cover w-full h-auto"
           />
         </motion.div>
 
-        {/* --- LAYER 2: The Overlays --- */}
-        {/* Attached to yImage so they stick to the image during parallax */}
+        {/* LAYER 2: The Overlays */}
         <motion.div
           style={{ y: yImage }}
           className="absolute -top-1 w-full h-32 md:h-60 bg-gradient-to-b from-background to-transparent pointer-events-none z-10"
         />
+
         <motion.div
           style={{ y: yImage }}
           className="absolute -bottom-1 w-full h-32 md:h-60 bg-gradient-to-t from-background to-transparent pointer-events-none z-10"
         />
 
-        {/* --- LAYER 3: The Calendar --- */}
-        {/* 
-           Mobile: Relative position, margin-top, centered width 
-           Desktop (lg): Absolute position, right aligned
-        */}
+        {/* LAYER 3: The Calendar */}
         <motion.div
           style={{ y: yCalendar }}
           className="
-            relative z-20 mt-4 w-full max-w-md 
+            relative z-20 mt-4 w-full max-w-md
             lg:absolute lg:top-14 lg:right-0 lg:mt-0 lg:w-[450px]
           "
         >
@@ -130,9 +170,14 @@ const CalBooking = () => {
             <Cal
               namespace="30min"
               calLink="your-username/30min"
-              // Change fixed width to 100% so the parent div controls the size
-              style={{ width: "100%", height: "280px", overflowX: "scroll" }}
-              config={{ layout: "month_view" }}
+              style={{
+                width: "100%",
+                height: "280px",
+                overflowX: "scroll",
+              }}
+              config={{
+                layout: "month_view",
+              }}
             />
           </div>
         </motion.div>
