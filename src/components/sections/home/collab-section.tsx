@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useRef, useState } from "react";
@@ -47,8 +48,10 @@ const CollabSec: React.FC = () => {
   ) => {
     const rect = ref.current?.getBoundingClientRect();
     if (!rect) return;
+
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 22;
     const y = ((e.clientY - rect.top) / rect.height - 0.5) * 22;
+
     setX(x);
     setY(y);
   };
@@ -56,17 +59,16 @@ const CollabSec: React.FC = () => {
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
 
-  // oklch(59.71% 0.23 23.86) ≈ #c93a2a in hex, ≈ rgb(201, 58, 42) for rgba usage
   const redColor = "oklch(59.71% 0.23 23.86)";
 
   return (
     <>
       <section
+        id="contact"
         ref={containerRef}
         className="relative flex flex-col items-center justify-center overflow-hidden h-auto md:min-h-screen"
       >
-        {/* Noise grain overlay — a full-viewport `fixed` layer that repaints on
-            every scroll frame. Skipped on phones where it costs more than it adds. */}
+        {/* Noise grain overlay */}
         {!isMobile && (
           <div
             className="pointer-events-none fixed inset-0 z-50 opacity-[0.04]"
@@ -77,7 +79,7 @@ const CollabSec: React.FC = () => {
           />
         )}
 
-        {/* ── TITLE ── */}
+        {/* TITLE */}
         <motion.div
           style={{ y: titleY, opacity: titleOpacity }}
           className="relative z-20 flex flex-col items-center mb-10 md:mb-0 pt-16 md:pt-0 md:absolute md:top-16 px-4"
@@ -93,12 +95,23 @@ const CollabSec: React.FC = () => {
               color: redColor,
             }}
           >
-            ✦ Together We Build ✦
+            ✦ LET&apos;S CREATE TOGETHER ✦
           </motion.p>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-3xl md:text-5xl font-bold text-foreground text-center"
+          >
+            Have a Creative Idea?
+          </motion.h2>
         </motion.div>
 
-        {/* ── SPLIT IMAGES ── */}
-        <div className="relative flex flex-row w-full h-auto  md:h-screen items-stretch">
+        {/* SPLIT IMAGES */}
+        <div className="relative flex flex-row w-full h-auto md:h-screen items-stretch">
+
           {/* LEFT */}
           <motion.div
             ref={leftRef}
@@ -131,7 +144,7 @@ const CollabSec: React.FC = () => {
             >
               <motion.img
                 src="/bg/1.png"
-                alt="Collaboration image 1"
+                alt="TIME KAMU creative collaboration"
                 loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover"
@@ -140,60 +153,13 @@ const CollabSec: React.FC = () => {
               />
             </motion.div>
 
-            {/* Dark overlay on hover */}
+            {/* Hover overlay */}
             <motion.div
               className="absolute inset-0 bg-black/50"
               initial={{ opacity: 0 }}
               animate={{ opacity: hovered === "left" ? 1 : 0 }}
               transition={{ duration: 0.4 }}
             />
-
-            {/* Center text - brand name */}
-            {/* <AnimatePresence>
-            {animationComplete && (
-              <motion.div
-                className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none"
-                initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{
-                  duration: 0.8,
-                  ease: [0.16, 1, 0.3, 1],
-                  delay: 0.2,
-                }}
-              >
-                <div className="relative">
-                  <motion.h2
-                    className="text-white text-3xl md:text-5xl mr-5 lg:text-6xl font-semibold tracking-wider"
-                    style={{
-                      textShadow: "0 4px 30px rgba(0,0,0,0.5)",
-                    }}
-                    initial={{ opacity: 0, letterSpacing: "0.3em" }}
-                    animate={{ opacity: 1, letterSpacing: "0.08em" }}
-                    transition={{
-                      duration: 1.2,
-                      ease: [0.16, 1, 0.3, 1],
-                      delay: 0.3,
-                    }}
-                  >
-                    <motion.img src="/md-red-logo.svg" alt="Logo" />
-                  </motion.h2>
-                  <motion.div
-                    className="h-px mt-3"
-                    style={{
-                      backgroundImage: `linear-gradient(to right, transparent, ${redColor}, transparent)`,
-                    }}
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{
-                      duration: 1,
-                      ease: [0.16, 1, 0.3, 1],
-                      delay: 0.6,
-                    }}
-                  />
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence> */}
 
             {/* Hover cursor */}
             <AnimatePresence>
@@ -217,7 +183,7 @@ const CollabSec: React.FC = () => {
                       className="text-white text-[10px] tracking-widest uppercase"
                       style={{ fontFamily: "'DM Mono', monospace" }}
                     >
-                      View
+                      Create
                     </span>
                   </div>
                 </motion.div>
@@ -227,7 +193,7 @@ const CollabSec: React.FC = () => {
             {/* Top-left corner */}
             <motion.div
               className="absolute top-6 left-6 w-8 h-8 border-t border-l"
-              style={{ borderColor: `oklch(59.71% 0.23 23.86 / 0.6)` }}
+              style={{ borderColor: "oklch(59.71% 0.23 23.86 / 0.6)" }}
               initial={{ opacity: 0, scale: 0.5 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.8 }}
@@ -237,7 +203,7 @@ const CollabSec: React.FC = () => {
             {/* Bottom-left corner */}
             <motion.div
               className="absolute bottom-6 left-6 w-8 h-8 border-b border-l"
-              style={{ borderColor: `oklch(59.71% 0.23 23.86 / 0.6)` }}
+              style={{ borderColor: "oklch(59.71% 0.23 23.86 / 0.6)" }}
               initial={{ opacity: 0, scale: 0.5 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 1.0 }}
@@ -265,7 +231,11 @@ const CollabSec: React.FC = () => {
             }}
             initial={{ clipPath: "inset(0 0 0 100%)" }}
             whileInView={{ clipPath: "inset(0 0 0 0%)" }}
-            transition={{ duration: 1.4, ease: [0.76, 0, 0.24, 1], delay: 0.1 }}
+            transition={{
+              duration: 1.4,
+              ease: [0.76, 0, 0.24, 1],
+              delay: 0.1,
+            }}
             viewport={{ once: true }}
           >
             <motion.div
@@ -274,7 +244,7 @@ const CollabSec: React.FC = () => {
             >
               <motion.img
                 src="/bg/2.png"
-                alt="Collaboration image 2"
+                alt="TIME KAMU creative portfolio"
                 loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover"
@@ -283,6 +253,7 @@ const CollabSec: React.FC = () => {
               />
             </motion.div>
 
+            {/* Hover overlay */}
             <motion.div
               className="absolute inset-0 bg-black/50"
               initial={{ opacity: 0 }}
@@ -290,53 +261,7 @@ const CollabSec: React.FC = () => {
               transition={{ duration: 0.4 }}
             />
 
-            {/* Center text - "you." */}
-            {/* <AnimatePresence>
-            {animationComplete && (
-              <motion.div
-                className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none"
-                initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{
-                  duration: 0.8,
-                  ease: [0.16, 1, 0.3, 1],
-                  delay: 0.4,
-                }}
-              >
-                <div className="relative">
-                  <motion.h2
-                    className="text-white text-3xl md:text-5xl lg:text-6xl font-semibold tracking-wider"
-                    style={{
-                      textShadow: "0 4px 30px rgba(0,0,0,0.5)",
-                    }}
-                    initial={{ opacity: 0, letterSpacing: "0.3em" }}
-                    animate={{ opacity: 1, letterSpacing: "0.08em" }}
-                    transition={{
-                      duration: 1.2,
-                      ease: [0.16, 1, 0.3, 1],
-                      delay: 0.5,
-                    }}
-                  >
-                    you.
-                  </motion.h2>
-                  <motion.div
-                    className="h-px mt-3"
-                    style={{
-                      backgroundImage: `linear-gradient(to right, transparent, ${redColor}, transparent)`,
-                    }}
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{
-                      duration: 1,
-                      ease: [0.16, 1, 0.3, 1],
-                      delay: 0.8,
-                    }}
-                  />
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence> */}
-
+            {/* Hover cursor */}
             <AnimatePresence>
               {hovered === "right" && (
                 <motion.div
@@ -358,7 +283,7 @@ const CollabSec: React.FC = () => {
                       className="text-white text-[10px] tracking-widest uppercase"
                       style={{ fontFamily: "'DM Mono', monospace" }}
                     >
-                      View
+                      Connect
                     </span>
                   </div>
                 </motion.div>
@@ -368,7 +293,7 @@ const CollabSec: React.FC = () => {
             {/* Top-right corner */}
             <motion.div
               className="absolute top-6 right-6 w-8 h-8 border-t border-r"
-              style={{ borderColor: `oklch(59.71% 0.23 23.86 / 0.6)` }}
+              style={{ borderColor: "oklch(59.71% 0.23 23.86 / 0.6)" }}
               initial={{ opacity: 0, scale: 0.5 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.9 }}
@@ -378,7 +303,7 @@ const CollabSec: React.FC = () => {
             {/* Bottom-right corner */}
             <motion.div
               className="absolute bottom-6 right-6 w-8 h-8 border-b border-r"
-              style={{ borderColor: `oklch(59.71% 0.23 23.86 / 0.6)` }}
+              style={{ borderColor: "oklch(59.71% 0.23 23.86 / 0.6)" }}
               initial={{ opacity: 0, scale: 0.5 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 1.1 }}
@@ -386,17 +311,19 @@ const CollabSec: React.FC = () => {
             />
           </motion.div>
 
-          {/* ── CENTER X CONNECTOR — Absolutely positioned, no layout impact ── */}
-          {/* Desktop */}
+          {/* CENTER CONNECTOR */}
           <AnimatePresence>
             {animationComplete && (
               <>
-                {/* Vertical divider line - absolute */}
+                {/* Desktop vertical divider */}
                 <motion.div
                   className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-white/10 z-30 -translate-x-1/2"
                   initial={{ scaleY: 0 }}
                   animate={{ scaleY: 1 }}
-                  transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{
+                    duration: 1.2,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
                   style={{ transformOrigin: "top" }}
                 >
                   <motion.div
@@ -411,7 +338,7 @@ const CollabSec: React.FC = () => {
                   />
                 </motion.div>
 
-                {/* X symbol - desktop */}
+                {/* Desktop X connector */}
                 <motion.div
                   className="group/x hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-40 items-center justify-center cursor-pointer"
                   initial={{ opacity: 0, scale: 0, rotate: -180 }}
@@ -424,11 +351,10 @@ const CollabSec: React.FC = () => {
                   onClick={() => setModalOpen(true)}
                   whileHover={{ scale: 1.08 }}
                   role="button"
-                  aria-label="Open collaboration form"
-                  title="Open collab form"
+                  aria-label="Open TIME KAMU collaboration form"
+                  title="Let's collaborate"
                 >
                   <div className="relative w-36 h-36 flex items-center justify-center">
-                    {/* Orbiting CTA text — spells out the action around the mark */}
                     <motion.div
                       className="absolute inset-0 pointer-events-none transition-opacity duration-500 group-hover/x:opacity-100 opacity-80"
                       animate={{ rotate: 360 }}
@@ -461,7 +387,6 @@ const CollabSec: React.FC = () => {
                       </svg>
                     </motion.div>
 
-                    {/* Expanding pulse ring — signals the mark is interactive */}
                     <motion.div
                       className="absolute w-16 h-16 rounded-full pointer-events-none"
                       style={{
@@ -477,14 +402,13 @@ const CollabSec: React.FC = () => {
                       }}
                     />
 
-                    {/* Center puck */}
                     <div className="relative w-16 h-16 flex items-center justify-center">
                       <motion.div
                         className="absolute inset-0 rounded-full bg-black/80 backdrop-blur-sm"
                         style={{
                           borderWidth: 1,
                           borderStyle: "solid",
-                          borderColor: `oklch(59.71% 0.23 23.86 / 0.4)`,
+                          borderColor: "oklch(59.71% 0.23 23.86 / 0.4)",
                         }}
                         animate={{
                           boxShadow: [
@@ -499,7 +423,7 @@ const CollabSec: React.FC = () => {
                           ease: "easeInOut",
                         }}
                       />
-                      {/* ✕ rotates 45° into a "+" on hover — a join/add metaphor */}
+
                       <motion.span
                         className="relative text-2xl font-bold z-10 transition-transform duration-500 ease-out group-hover/x:rotate-45"
                         style={{
@@ -525,7 +449,7 @@ const CollabSec: React.FC = () => {
                   </div>
                 </motion.div>
 
-                {/* X symbol - mobile (between stacked images) */}
+                {/* Mobile X connector */}
                 <motion.div
                   className="md:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-40 flex items-center justify-center cursor-pointer"
                   initial={{ opacity: 0, scale: 0, rotate: -180 }}
@@ -538,11 +462,10 @@ const CollabSec: React.FC = () => {
                   onClick={() => setModalOpen(true)}
                   whileTap={{ scale: 0.94 }}
                   role="button"
-                  aria-label="Open collaboration form"
-                  title="Open collab form"
+                  aria-label="Open TIME KAMU collaboration form"
+                  title="Let's collaborate"
                 >
                   <div className="relative w-28 h-28 flex items-center justify-center">
-                    {/* Orbiting CTA text — spells out the action around the mark */}
                     <motion.div
                       className="absolute inset-0 pointer-events-none opacity-90"
                       animate={{ rotate: 360 }}
@@ -575,7 +498,6 @@ const CollabSec: React.FC = () => {
                       </svg>
                     </motion.div>
 
-                    {/* Expanding pulse ring — signals the mark is tappable */}
                     <motion.div
                       className="absolute w-12 h-12 rounded-full pointer-events-none"
                       style={{
@@ -591,14 +513,13 @@ const CollabSec: React.FC = () => {
                       }}
                     />
 
-                    {/* Center puck */}
                     <div className="relative w-12 h-12 flex items-center justify-center">
                       <motion.div
                         className="absolute inset-0 rounded-full bg-black/80 backdrop-blur-sm"
                         style={{
                           borderWidth: 1,
                           borderStyle: "solid",
-                          borderColor: `oklch(59.71% 0.23 23.86 / 0.4)`,
+                          borderColor: "oklch(59.71% 0.23 23.86 / 0.4)",
                         }}
                         animate={{
                           boxShadow: [
@@ -613,6 +534,7 @@ const CollabSec: React.FC = () => {
                           ease: "easeInOut",
                         }}
                       />
+
                       <motion.span
                         className="relative text-xl font-bold z-10"
                         style={{
@@ -630,7 +552,11 @@ const CollabSec: React.FC = () => {
           </AnimatePresence>
         </div>
       </section>
-      <CollabModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+
+      <CollabModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+      />
     </>
   );
 };
