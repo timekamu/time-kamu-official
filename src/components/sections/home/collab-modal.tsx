@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -14,7 +15,13 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const PROJECT_TYPES = ["BRAND", "WEB", "MOTION", "ALL OF THE ABOVE"] as const;
+const PROJECT_TYPES = [
+  "VIDEO EDITING",
+  "2D ANIMATION",
+  "GRAPHIC DESIGN",
+  "MOTION DESIGN",
+  "ALL OF THE ABOVE",
+] as const;
 
 const RED = "oklch(59.71% 0.23 23.86)";
 const RED_RGBA = "rgba(201, 58, 42,";
@@ -23,7 +30,7 @@ const WORDS = [
   { text: "YOUR", accent: false },
   { text: "VISION.", accent: true },
   { text: "OUR", accent: false },
-  { text: "CRAFT.", accent: true },
+  { text: "CREATION.", accent: true },
 ];
 
 const SUCCESS_WORDS = [
@@ -56,19 +63,23 @@ export default function CollabModal({ isOpen, onClose }: Props) {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<FormData>({ resolver: zodResolver(schema) });
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
 
   // Escape key + body scroll lock
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
+
     if (isOpen) {
       document.addEventListener("keydown", onKey);
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
+
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
@@ -85,19 +96,28 @@ export default function CollabModal({ isOpen, onClose }: Props) {
         setSelectedType("");
         setIsSubmitting(false);
       }, 900);
+
       return () => clearTimeout(t);
     }
   }, [isOpen, reset]);
 
+  // Form submission
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     setSubmitError(false);
+
     try {
       const res = await fetch("/api/collab", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, projectType: selectedType }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...data,
+          projectType: selectedType,
+        }),
       });
+
       if (res.ok) {
         setIsSuccess(true);
       } else {
@@ -111,7 +131,11 @@ export default function CollabModal({ isOpen, onClose }: Props) {
   };
 
   const borderBottom = (field: string) =>
-    `1px solid ${focusedField === field ? RED : "rgba(255,255,255,0.13)"}`;
+    `1px solid ${
+      focusedField === field
+        ? RED
+        : "rgba(255,255,255,0.13)"
+    }`;
 
   const baseInput: React.CSSProperties = {
     width: "100%",
@@ -149,15 +173,21 @@ export default function CollabModal({ isOpen, onClose }: Props) {
 
   return (
     <>
-      {/* Scoped styles for placeholder + scrollbar */}
+      {/* Scoped styles */}
       <style>{`
         .collab-input::placeholder {
           color: rgba(255,255,255,0.16);
           font-size: 13px;
           letter-spacing: 0.04em;
         }
-        .collab-input::-webkit-scrollbar { display: none; }
-        .collab-input { scrollbar-width: none; }
+
+        .collab-input::-webkit-scrollbar {
+          display: none;
+        }
+
+        .collab-input {
+          scrollbar-width: none;
+        }
       `}</style>
 
       <AnimatePresence>
@@ -166,12 +196,15 @@ export default function CollabModal({ isOpen, onClose }: Props) {
             initial={{ clipPath: "circle(0% at 50% 50%)" }}
             animate={{ clipPath: "circle(150% at 50% 50%)" }}
             exit={{ clipPath: "circle(0% at 50% 50%)" }}
-            transition={{ duration: 0.88, ease: [0.76, 0, 0.24, 1] }}
+            transition={{
+              duration: 0.88,
+              ease: [0.76, 0, 0.24, 1],
+            }}
             className="fixed inset-0 z-200"
             style={{ background: "#080808" }}
             aria-modal="true"
             role="dialog"
-            aria-label="Collaboration form"
+            aria-label="TIME KAMU Collaboration Form"
           >
             {/* Grain */}
             <div
@@ -190,16 +223,10 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                 aria-hidden="true"
                 className="absolute w-9 h-9 z-10 pointer-events-none"
                 style={{
-                  ...("top" in c ? { top: (c as { top: number }).top } : {}),
-                  ...("bottom" in c
-                    ? { bottom: (c as { bottom: number }).bottom }
-                    : {}),
-                  ...("left" in c
-                    ? { left: (c as { left: number }).left }
-                    : {}),
-                  ...("right" in c
-                    ? { right: (c as { right: number }).right }
-                    : {}),
+                  ...("top" in c ? { top: c.top } : {}),
+                  ...("bottom" in c ? { bottom: c.bottom } : {}),
+                  ...("left" in c ? { left: c.left } : {}),
+                  ...("right" in c ? { right: c.right } : {}),
                   borderTop: c.id.includes("t")
                     ? `1px solid ${RED_RGBA} 0.45)`
                     : "none",
@@ -225,12 +252,16 @@ export default function CollabModal({ isOpen, onClose }: Props) {
 
             {/* Scrollable wrapper */}
             <div className="relative z-10 h-full overflow-y-auto flex flex-col">
-              {/* ── HEADER ── */}
+
+              {/* HEADER */}
               <motion.header
                 className="flex items-center justify-between px-8 md:px-16 pt-8 pb-5 shrink-0"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.52, duration: 0.5 }}
+                transition={{
+                  delay: 0.52,
+                  duration: 0.5,
+                }}
               >
                 <span
                   style={{
@@ -241,18 +272,26 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                     textTransform: "uppercase",
                   }}
                 >
-                  ✦ YOUR NAME
+                  ✦ TIME KAMU
                 </span>
 
                 <motion.button
                   onClick={onClose}
                   className="flex items-center gap-3 cursor-pointer"
-                  style={{ background: "none", border: "none", padding: 0 }}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    padding: 0,
+                  }}
                   aria-label="Close collaboration form"
                   whileHover="hov"
                 >
                   <motion.span
-                    variants={{ hov: { color: "rgba(255,255,255,0.6)" } }}
+                    variants={{
+                      hov: {
+                        color: "rgba(255,255,255,0.6)",
+                      },
+                    }}
                     style={{
                       fontFamily: "var(--font-poppins)",
                       fontSize: "10px",
@@ -264,8 +303,14 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                   >
                     CLOSE
                   </motion.span>
+
                   <motion.span
-                    variants={{ hov: { rotate: 90, color: RED } }}
+                    variants={{
+                      hov: {
+                        rotate: 90,
+                        color: RED,
+                      },
+                    }}
                     transition={{ duration: 0.3 }}
                     style={{
                       color: "rgba(255,255,255,0.45)",
@@ -297,14 +342,18 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                 aria-hidden="true"
               />
 
-              {/* ── BODY ── */}
+              {/* BODY */}
               <div className="flex-1 flex flex-col lg:flex-row px-8 md:px-16 py-10 lg:py-0 gap-10 lg:gap-0 min-h-0">
-                {/* ── LEFT — Typography ── */}
+
+                {/* LEFT — Typography */}
                 <div className="lg:w-[40%] flex flex-col justify-center lg:py-16 lg:pr-14">
                   <motion.p
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.66, duration: 0.5 }}
+                    transition={{
+                      delay: 0.66,
+                      duration: 0.5,
+                    }}
                     style={{
                       fontFamily: "var(--font-poppins)",
                       color: RED,
@@ -314,10 +363,10 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                       marginBottom: "28px",
                     }}
                   >
-                    ✦ INITIATE COLLABORATION
+                    ✦ LET&apos;S CREATE TOGETHER
                   </motion.p>
 
-                  {/* Stacked giant words */}
+                  {/* Stacked words */}
                   <div aria-hidden="true">
                     {WORDS.map(({ text, accent }, i) => (
                       <div key={text} style={{ overflow: "hidden" }}>
@@ -348,7 +397,10 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                   <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 1.04, duration: 0.8 }}
+                    transition={{
+                      delay: 1.04,
+                      duration: 0.8,
+                    }}
                     style={{
                       fontFamily: "var(--font-poppins)",
                       fontSize: "11px",
@@ -358,8 +410,9 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                       maxWidth: "260px",
                     }}
                   >
-                    We craft digital experiences that demand attention.
-                    Let&apos;s build something worth remembering.
+                    From video editing to animation and graphic
+                    design, let&apos;s turn your ideas into
+                    something worth remembering.
                   </motion.p>
 
                   {/* Red gradient line */}
@@ -382,7 +435,7 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                   />
                 </div>
 
-                {/* Vertical divider — desktop */}
+                {/* Vertical divider */}
                 <motion.div
                   aria-hidden="true"
                   className="hidden lg:block w-px self-stretch shrink-0"
@@ -399,10 +452,11 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                   }}
                 />
 
-                {/* ── RIGHT — Form / Success ── */}
+                {/* RIGHT — Form / Success */}
                 <div className="lg:w-[60%] flex flex-col justify-center lg:py-16 lg:pl-14">
                   <AnimatePresence mode="wait">
-                    {/* ── FORM ── */}
+
+                    {/* FORM */}
                     {!isSuccess && (
                       <motion.form
                         key="form"
@@ -413,7 +467,8 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                         transition={{ duration: 0.35 }}
                         noValidate
                       >
-                        {/* ── NAME ── */}
+
+                        {/* NAME */}
                         <motion.div
                           className="mb-7"
                           initial={{ opacity: 0, y: 18 }}
@@ -427,6 +482,7 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                           <label htmlFor="collab-name" style={labelStyle}>
                             NAME <span style={{ color: RED }}>*</span>
                           </label>
+
                           <input
                             id="collab-name"
                             {...register("name")}
@@ -440,6 +496,7 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                             onFocus={() => setFocusedField("name")}
                             onBlur={() => setFocusedField(null)}
                           />
+
                           {errors.name && (
                             <p style={errorStyle} role="alert">
                               ↳ {errors.name.message}
@@ -447,7 +504,7 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                           )}
                         </motion.div>
 
-                        {/* ── EMAIL ── */}
+                        {/* EMAIL */}
                         <motion.div
                           className="mb-7"
                           initial={{ opacity: 0, y: 18 }}
@@ -461,6 +518,7 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                           <label htmlFor="collab-email" style={labelStyle}>
                             EMAIL <span style={{ color: RED }}>*</span>
                           </label>
+
                           <input
                             id="collab-email"
                             {...register("email")}
@@ -475,6 +533,7 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                             onFocus={() => setFocusedField("email")}
                             onBlur={() => setFocusedField(null)}
                           />
+
                           {errors.email && (
                             <p style={errorStyle} role="alert">
                               ↳ {errors.email.message}
@@ -482,7 +541,7 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                           )}
                         </motion.div>
 
-                        {/* ── PROJECT TYPE ── */}
+                        {/* PROJECT TYPE */}
                         <motion.div
                           className="mb-7"
                           initial={{ opacity: 0, y: 18 }}
@@ -493,7 +552,10 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                             ease: [0.16, 1, 0.3, 1],
                           }}
                         >
-                          <label style={labelStyle}>PROJECT TYPE</label>
+                          <label style={labelStyle}>
+                            PROJECT TYPE
+                          </label>
+
                           <div
                             style={{
                               display: "flex",
@@ -505,6 +567,7 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                           >
                             {PROJECT_TYPES.map((type) => {
                               const active = selectedType === type;
+
                               return (
                                 <motion.button
                                   key={type}
@@ -520,9 +583,13 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                                     letterSpacing: "0.2em",
                                     textTransform: "uppercase",
                                     padding: "9px 15px",
-                                    border: `1px solid ${active ? RED : "rgba(255,255,255,0.16)"}`,
+                                    border: `1px solid ${
+                                      active
+                                        ? RED
+                                        : "rgba(255,255,255,0.16)"
+                                    }`,
                                     background: active
-                                      ? `oklch(59.71% 0.23 23.86 / 0.12)`
+                                      ? "oklch(59.71% 0.23 23.86 / 0.12)"
                                       : "transparent",
                                     color: active
                                       ? RED
@@ -538,7 +605,7 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                           </div>
                         </motion.div>
 
-                        {/* ── MESSAGE ── */}
+                        {/* MESSAGE */}
                         <motion.div
                           className="mb-9"
                           initial={{ opacity: 0, y: 18 }}
@@ -552,6 +619,7 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                           <label htmlFor="collab-message" style={labelStyle}>
                             MESSAGE <span style={{ color: RED }}>*</span>
                           </label>
+
                           <textarea
                             id="collab-message"
                             {...register("message")}
@@ -568,6 +636,7 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                             onFocus={() => setFocusedField("message")}
                             onBlur={() => setFocusedField(null)}
                           />
+
                           {errors.message && (
                             <p style={errorStyle} role="alert">
                               ↳ {errors.message.message}
@@ -580,14 +649,17 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                           <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            style={{ ...errorStyle, marginBottom: "12px" }}
+                            style={{
+                              ...errorStyle,
+                              marginBottom: "12px",
+                            }}
                             role="alert"
                           >
                             ↳ Something went wrong. Please try again.
                           </motion.p>
                         )}
 
-                        {/* ── TRANSMIT BUTTON ── */}
+                        {/* TRANSMIT BUTTON */}
                         <motion.div
                           initial={{ opacity: 0, y: 18 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -610,7 +682,6 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                             initial="rest"
                             whileHover={!isSubmitting ? "hov" : undefined}
                           >
-                            {/* Red fill sweep */}
                             <motion.div
                               aria-hidden="true"
                               variants={{
@@ -630,7 +701,7 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                                 transformOrigin: "left",
                               }}
                             />
-                            {/* Shine line at top */}
+
                             <motion.div
                               aria-hidden="true"
                               variants={{
@@ -653,6 +724,7 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                                 transformOrigin: "left",
                               }}
                             />
+
                             <span
                               style={{
                                 position: "relative",
@@ -684,6 +756,7 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                                   >
                                     ◌
                                   </motion.span>
+
                                   TRANSMITTING
                                 </>
                               ) : (
@@ -695,7 +768,7 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                       </motion.form>
                     )}
 
-                    {/* ── SUCCESS STATE ── */}
+                    {/* SUCCESS STATE */}
                     {isSuccess && (
                       <motion.div
                         key="success"
@@ -729,7 +802,6 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                           </div>
                         ))}
 
-                        {/* Animated red rule */}
                         <motion.div
                           aria-hidden="true"
                           style={{
@@ -751,7 +823,10 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                         <motion.p
                           initial={{ opacity: 0, y: 8 }}
                           animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.5, duration: 0.6 }}
+                          transition={{
+                            delay: 0.5,
+                            duration: 0.6,
+                          }}
                           style={{
                             fontFamily: "var(--font-poppins)",
                             fontSize: "12px",
@@ -760,16 +835,19 @@ export default function CollabModal({ isOpen, onClose }: Props) {
                             marginBottom: "32px",
                           }}
                         >
-                          We&apos;ve received your transmission.
+                          Your message has reached TIME KAMU.
                           <br />
-                          Expect a reply within 24–48 hours.
+                          Thank you for reaching out.
                         </motion.p>
 
                         <motion.button
                           onClick={onClose}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
-                          transition={{ delay: 0.7, duration: 0.6 }}
+                          transition={{
+                            delay: 0.7,
+                            duration: 0.6,
+                          }}
                           whileHover={{ x: -5 }}
                           style={{
                             fontFamily: "var(--font-poppins)",
