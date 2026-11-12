@@ -11,6 +11,13 @@ import Analytics from "@/components/common/analytics";
 import ConsoleLog from "@/components/common/console-log";
 import CustomCursor from "@/components/ui/custom-cursor";
 
+const BRAND_NAME = "TIME KAMU";
+const FOUNDER_NAME = "Indrajit Bhunia";
+const CREATOR_NAME = "INDRA";
+
+const SITE_DESCRIPTION =
+  "TIME KAMU is a creative brand founded by Indrajit Bhunia (INDRA), an Indian YouTuber, Graphic Designer and Video Editor specializing in video editing, graphic design, 2D animation and visual storytelling.";
+
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
@@ -27,69 +34,87 @@ const cormorantGaramond = Cormorant_Garamond({
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
+
   title: {
-    default: "Your Name - Professional Portfolio & Digital Services",
-    template: "%s | Your Name",
+    default: "TIME KAMU | Official Creative Brand",
+    template: "%s | TIME KAMU",
   },
-  description:
-    "Professional portfolio showcasing web development, design, and digital solutions. Expert in modern web technologies, creative design, and innovative digital experiences.",
+
+  description: SITE_DESCRIPTION,
+
   keywords: [
-    "Web Development",
-    "Portfolio",
-    "Digital Services",
-    "Web Design",
-    "UI/UX Design",
-    "Frontend Development",
-    "Next.js",
-    "React",
-    "TypeScript",
-    "Full Stack Developer",
-    "Creative Solutions",
+    "TIME KAMU",
+    "Indrajit Bhunia",
+    "INDRA",
+    "TIME KAMU Official",
+    "Indian YouTuber",
+    "Video Editor",
+    "Graphic Designer",
+    "2D Animator",
+    "Video Editing",
+    "Graphic Design",
+    "2D Animation",
+    "Digital Creator",
+    "Visual Storytelling",
+    "Creative Portfolio",
+    "Bengali Video Editor",
+    "Tamluk",
+    "West Bengal",
+    "India",
   ],
-  authors: [{ name: "Your Name" }],
-  creator: "Your Name",
-  publisher: "Your Name",
+
+  authors: [
+    {
+      name: FOUNDER_NAME,
+    },
+  ],
+
+  creator: CREATOR_NAME,
+  publisher: BRAND_NAME,
+
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
+
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "en_IN",
     url: BASE_URL,
-    title: "Your Name - Professional Portfolio & Digital Services",
-    description:
-      "Explore a portfolio featuring cutting-edge web development projects, creative designs, and innovative digital solutions.",
-    siteName: "Your Name",
+    title: "TIME KAMU | Official Creative Brand",
+    description: SITE_DESCRIPTION,
+    siteName: BRAND_NAME,
+
     images: [
       {
         url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "Portfolio preview",
+        alt: "TIME KAMU Official Creative Brand",
         type: "image/jpeg",
       },
     ],
   },
+
   twitter: {
     card: "summary_large_image",
-    title: "Your Name - Professional Portfolio & Digital Services",
-    description:
-      "Explore a portfolio featuring cutting-edge web development projects, creative designs, and innovative digital solutions.",
-    creator: "@yourhandle",
+    title: "TIME KAMU | Official Creative Brand",
+    description: SITE_DESCRIPTION,
     images: [
       {
         url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "Portfolio preview",
+        alt: "TIME KAMU Official Creative Brand",
       },
     ],
   },
+
   robots: {
     index: true,
     follow: true,
+
     googleBot: {
       index: true,
       follow: true,
@@ -98,6 +123,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+
   icons: {
     icon: [
       { url: "/icon" },
@@ -106,16 +132,14 @@ export const metadata: Metadata = {
     shortcut: "/md-red-logo.svg",
     apple: "/md-red-logo.svg",
   },
+
   manifest: "/manifest.webmanifest",
-  verification: {
-    google: "your-google-verification-code",
-    // yandex: "your-yandex-verification-code",
-    // bing: "your-bing-verification-code",
-  },
+
   alternates: {
     canonical: BASE_URL,
   },
-  category: "technology",
+
+  category: "entertainment",
 };
 
 export default function RootLayout({
@@ -123,40 +147,53 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // suppressHydrationWarning: next-themes adds the `class="dark"` +
-  // `color-scheme` style to <html> on the client, which the server can't know
-  // about — this tells React to ignore that expected attribute mismatch.
+  // Preserve the original hydration behavior.
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en-IN" suppressHydrationWarning>
       <head>
         {/*
-          The hero video (/hv.webm) is eagerly buffered by its own
-          <video preload="auto" fetchpriority="high"> in AboutMe. We intentionally
-          do NOT use <link rel="preload" as="video"> — browsers reject "video" as
-          an unsupported `as` value, which is what triggered the console warning.
+          The hero video (/hv.webm) is eagerly buffered
+          by its own video element in AboutMe.
         */}
 
-        {/* Warm up Vimeo connections early so ShowReel iframes load faster */}
-        <link rel="preconnect" href="https://player.vimeo.com" />
-        <link rel="preconnect" href="https://i.vimeocdn.com" />
-        <link rel="preconnect" href="https://f.vimeocdn.com" />
+        {/* Vimeo connection optimization */}
+        <link
+          rel="preconnect"
+          href="https://player.vimeo.com"
+        />
 
-        {/* ImageKit serves the 47 AboutScrollSection frames (crossOrigin) */}
+        <link
+          rel="preconnect"
+          href="https://i.vimeocdn.com"
+        />
+
+        <link
+          rel="preconnect"
+          href="https://f.vimeocdn.com"
+        />
+
+        {/* ImageKit connection optimization */}
         <link
           rel="preconnect"
           href="https://ik.imagekit.io"
           crossOrigin="anonymous"
         />
-        <link rel="dns-prefetch" href="https://ik.imagekit.io" />
+
+        <link
+          rel="dns-prefetch"
+          href="https://ik.imagekit.io"
+        />
 
         <StructuredData />
         <Analytics />
       </head>
+
       <body
-        className={`${poppins.variable} ${cormorantGaramond.variable} antialiased  mx-auto `}
+        className={`${poppins.variable} ${cormorantGaramond.variable} antialiased mx-auto`}
       >
         <CustomCursor />
         <ConsoleLog />
+
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
