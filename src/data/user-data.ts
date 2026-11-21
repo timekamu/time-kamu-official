@@ -1,52 +1,45 @@
-
 export interface UserData {
   id: string;
   name: string;
   avatar: string;
   message: string;
   role: string;
-  vimeoId?: string;
 }
 
 export const userData: UserData[] = [
   {
     id: "video-editing",
     name: "Video Editing",
-    avatar: "/testimonials/placeholder-1.png",
-    message:
-      "Transforming raw footage into engaging visual stories with cinematic cuts, smooth transitions, creative effects and professional finishing.",
+    avatar: "/gallery/video-editing.png",
+    message: "Transforming raw footage into cinematic visual stories with professional editing, smooth transitions and visual effects.",
     role: "TIME KAMU • Creative Service",
   },
   {
     id: "2d-animation",
     name: "2D Animation",
-    avatar: "/testimonials/placeholder-2.png",
-    message:
-      "Bringing ideas to life through expressive 2D animation, character movement, storytelling and imaginative visual sequences.",
-    role: "TIME KAMU • Creative Service",
+    avatar: "/gallery/2d-animation.png",
+    message: "Bringing imagination to life through expressive animation, character design and visual storytelling.",
+    role: "TIME KAMU • Animation",
   },
   {
     id: "graphic-design",
     name: "Graphic Design",
-    avatar: "/testimonials/placeholder-3.png",
-    message:
-      "Creating eye-catching graphics, thumbnails, social media designs and visual identities that make every idea stand out.",
-    role: "TIME KAMU • Creative Service",
+    avatar: "/gallery/graphic-design.png",
+    message: "Creating stunning thumbnails, posters, digital artwork and unique visual identities.",
+    role: "TIME KAMU • Design Studio",
   },
   {
-    id: "motion-design",
-    name: "Motion Design",
-    avatar: "/testimonials/placeholder-4.png",
-    message:
-      "Combining typography, movement, visual effects and creative transitions to produce dynamic motion graphics.",
-    role: "TIME KAMU • Creative Service",
+    id: "motion-graphics",
+    name: "Motion Graphics",
+    avatar: "/gallery/motion-graphics.png",
+    message: "Combining dynamic typography, motion effects and creative transitions to create engaging visuals.",
+    role: "TIME KAMU • Motion Design",
   },
   {
-    id: "creative-storytelling",
-    name: "Creative Storytelling",
-    avatar: "/testimonials/placeholder-5.png",
-    message:
-      "Every frame has a purpose. Turning imagination into meaningful visual experiences through creativity and attention to detail.",
+    id: "creative-projects",
+    name: "Creative Projects",
+    avatar: "/gallery/creative-projects.png",
+    message: "Exploring original ideas, experimental visuals and imaginative projects crafted with passion.",
     role: "TIME KAMU • Creative Vision",
   },
 ];
