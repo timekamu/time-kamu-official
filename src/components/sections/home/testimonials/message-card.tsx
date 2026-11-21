@@ -40,47 +40,44 @@ export const MessageCard = ({
           isActive ? "opacity-100" : "opacity-60"
         )}
       >
-        {/* Image */}
+        {/* Gallery Image */}
         <div className="relative aspect-video w-full overflow-hidden bg-black">
           <img
             src={avatar}
             alt={name}
             loading="lazy"
-            className={cn(
-              "h-full w-full object-cover transition-transform duration-700",
-              "group-hover:scale-105"
-            )}
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
 
-          <div className="absolute bottom-4 left-4 z-10">
-            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white/80">
+          <div className="absolute bottom-3 left-4 z-10">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/90">
               TIME KAMU
             </span>
           </div>
         </div>
 
-        {/* Content */}
-        <div className="relative flex flex-1 flex-col justify-between p-6">
-          <Quote className="absolute -right-4 -top-4 size-24 rotate-12 text-muted/10 transition-colors duration-500 group-hover:text-primary/10" />
+        {/* Compact Content */}
+        <div className="relative flex flex-1 flex-col p-4 md:p-5">
+          <Quote className="absolute -right-3 -top-3 size-16 rotate-12 text-muted/10 transition-colors duration-500 group-hover:text-primary/10" />
 
           <div className="relative z-10">
-            <h3 className="text-xl font-bold text-foreground md:text-2xl">
+            <h3 className="text-lg font-bold leading-tight text-foreground md:text-xl">
               {name}
             </h3>
 
-            <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-primary">
+            <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-primary md:text-xs">
               {role}
             </p>
 
-            <blockquote className="mt-4 text-sm leading-relaxed text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
+            <blockquote className="mt-3 line-clamp-3 text-xs leading-relaxed text-muted-foreground transition-colors duration-300 group-hover:text-foreground md:text-sm">
               {message}
             </blockquote>
           </div>
         </div>
 
-        {/* Shine */}
+        {/* Shine Effect */}
         <div className="pointer-events-none absolute inset-0 z-20 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
       </figure>
 
