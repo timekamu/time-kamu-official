@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useRef, useState, useEffect, useCallback, useMemo } from "react";
@@ -13,19 +14,13 @@ import { Grain } from "./grain";
 import { ReelCard } from "./reel-card";
 import { VideoModal } from "./video-modal";
 
-/**
- * Persistent Vimeo backdrop for a single slide.
- * Mounted once and never destroyed — only opacity toggles.
- */
-function VimeoBackdrop({
+function YouTubeBackdrop({
   item,
   isActive,
   mountVideo,
 }: {
   item: showReelI;
   isActive: boolean;
-  /** When false we render only the thumbnail — no iframe. On phones we pass
-   *  false for non-active slides so at most one Vimeo player is ever alive. */
   mountVideo: boolean;
 }) {
   return (
@@ -37,7 +32,6 @@ function VimeoBackdrop({
         transition: "opacity 0.7s ease-in-out",
       }}
     >
-      {/* Thumbnail fallback — visible instantly */}
       <img
         src={item.thumbnail}
         alt=""
@@ -45,26 +39,17 @@ function VimeoBackdrop({
         draggable={false}
       />
 
-      {/* Vimeo background player — autoplays muted, no UI */}
       {mountVideo && (
         <iframe
-          src={`https://player.vimeo.com/video/${item.vimeoId}?background=1&autoplay=1&loop=1&muted=1&dnt=1`}
+          src={`https://www.youtube.com/embed/${item.youtubeId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${item.youtubeId}&playsinline=1&rel=0`}
           loading="lazy"
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            width: "max(100%, 177.78vh)",
-            height: "max(100%, 56.25vw)",
-            transform: "translate(-50%, -50%)",
-            border: 0,
-          }}
-          allow="autoplay; fullscreen"
+          className="absolute inset-0 h-full w-full scale-[1.35] pointer-events-none"
+          style={{ border: 0 }}
+          allow="autoplay; encrypted-media; picture-in-picture"
           title={item.title}
         />
       )}
 
-      {/* Cinematic grade overlays */}
       <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/10 to-black/50" />
       <div className="absolute inset-0 bg-linear-to-r from-black/50 via-transparent to-black/20" />
     </div>
@@ -85,12 +70,14 @@ export default function ShowReel() {
   const suppressClick = useRef(false);
   const total = showRealData.length;
 
-  // Detect touch / coarse-pointer devices → hide the custom play cursor
   useEffect(() => {
     setIsTouch(window.matchMedia("(pointer: coarse)").matches);
+
+    return () => {
+      if (lockTimer.current) clearTimeout(lockTimer.current);
+    };
   }, []);
 
-  // Which slide indices should have their iframes mounted (current + adjacent)
   const mountedIndices = useMemo(() => {
     const set = new Set<number>();
     set.add(active);
@@ -99,62 +86,64 @@ export default function ShowReel() {
     return set;
   }, [active, total]);
 
-  // Cursor spring
   const cursorX = useMotionValue(-200);
   const cursorY = useMotionValue(-200);
   const springX = useSpring(cursorX, { stiffness: 500, damping: 40 });
   const springY = useSpring(cursorY, { stiffness: 500, damping: 40 });
 
-  // 10-second autoplay — pauses while modal is open, resets on manual nav
   useEffect(() => {
-    if (modal) return;
+    if (modal || total <= 1) return;
+
     const id = setInterval(() => {
       setDir(1);
       setActive((prev) => (prev + 1) % total);
     }, 10000);
+
     return () => clearInterval(id);
   }, [modal, total, lastNav]);
 
   const navigate = useCallback(
     (step: number) => {
       if (locked) return;
+
       const next = active + step;
       if (next < 0 || next >= total) return;
+
       setDir(step);
       setActive(next);
       setLastNav(Date.now());
       setLocked(true);
+
       if (lockTimer.current) clearTimeout(lockTimer.current);
+
       lockTimer.current = setTimeout(() => setLocked(false), 700);
     },
-    [active, locked, total],
+    [active, locked, total]
   );
 
-  // Drag / swipe to move to the previous or next reel
   const handleDragStart = useCallback(
     (e: React.PointerEvent) => {
       if (modal) return;
       suppressClick.current = false;
       dragStart.current = { x: e.clientX, y: e.clientY };
     },
-    [modal],
+    [modal]
   );
 
   const handleDragEnd = useCallback(
     (e: React.PointerEvent) => {
       if (!dragStart.current || modal) return;
+
       const dx = e.clientX - dragStart.current.x;
       const dy = e.clientY - dragStart.current.y;
       dragStart.current = null;
 
-      const SWIPE_THRESHOLD = 50;
-      // Horizontal swipe wins → drag left = next, drag right = previous
-      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > SWIPE_THRESHOLD) {
-        suppressClick.current = true; // don't also open the modal on a swipe
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+        suppressClick.current = true;
         navigate(dx < 0 ? 1 : -1);
       }
     },
-    [modal, navigate],
+    [modal, navigate]
   );
 
   useEffect(() => {
@@ -163,6 +152,7 @@ export default function ShowReel() {
       if (e.key === "ArrowUp" || e.key === "ArrowLeft") navigate(-1);
       if (e.key === "Escape") setModal(null);
     };
+
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [navigate]);
@@ -171,7 +161,6 @@ export default function ShowReel() {
     <>
       <Grain />
 
-      {/* Shadcn-based fullscreen video modal */}
       <VideoModal item={modal} onClose={() => setModal(null)} />
 
       <section
@@ -193,25 +182,19 @@ export default function ShowReel() {
         }}
         onMouseLeave={() => setCursorVisible(false)}
       >
-        {/* ── PERSISTENT VIDEO BACKDROPS ──
-            Current + adjacent slides stay mounted so their iframes never reload.
-            Only opacity toggles on transition → instant video swap. */}
         {showRealData.map((item, i) => {
           if (!mountedIndices.has(i)) return null;
-          // Desktop pre-mounts neighbors for an instant swap; touch devices
-          // keep only the active player alive to avoid 3 concurrent iframes.
-          const mountVideo = isTouch ? i === active : true;
+
           return (
-            <VimeoBackdrop
+            <YouTubeBackdrop
               key={`backdrop-${i}`}
               item={item}
               isActive={i === active}
-              mountVideo={mountVideo}
+              mountVideo={isTouch ? i === active : true}
             />
           );
         })}
 
-        {/* Custom play cursor — desktop / fine-pointer only */}
         {!isTouch && (
           <motion.div
             style={{ x: springX, y: springY }}
@@ -225,17 +208,12 @@ export default function ShowReel() {
             }}
             className="pointer-events-none fixed left-0 top-0 z-9998 flex size-18 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/10 backdrop-blur-sm"
           >
-            <svg
-              viewBox="0 0 10 12"
-              className="h-4 w-3.5 translate-x-px fill-white"
-              aria-hidden
-            >
+            <svg viewBox="0 0 10 12" className="h-4 w-3.5 translate-x-px fill-white" aria-hidden>
               <polygon points="0,0 10,6 0,12" />
             </svg>
           </motion.div>
         )}
 
-        {/* Full-bleed cards */}
         <AnimatePresence custom={dir} mode="wait">
           <ReelCard
             key={active}
@@ -250,7 +228,6 @@ export default function ShowReel() {
           />
         </AnimatePresence>
 
-        {/* Prev / Next + dot navigation */}
         <div className="absolute bottom-10 left-1/2 z-30 flex -translate-x-1/2 items-center gap-3">
           <motion.button
             onClick={(e) => {
@@ -269,6 +246,7 @@ export default function ShowReel() {
             {Array.from({ length: total }).map((_, i) => (
               <motion.button
                 key={i}
+                aria-label={`Go to video ${i + 1}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   if (i !== active) {
